@@ -589,7 +589,7 @@ html, body {
 </div>
 
 <!-- Slide Counter -->
-<div id="slide-counter">1 / 8</div>
+<div id="slide-counter">1 / 9</div>
 
 <!-- Nav Arrows -->
 <button class="nav-arrow" id="nav-prev" aria-label="Anterior">
@@ -1096,9 +1096,106 @@ html, body {
 </div>
 
 <!-- ── SLIDE 8 — NEXT STEPS ───────────────────────────────── -->
+<!-- ── SLIDE 8 — COMPLETITUD OLD vs NEW ─────────────────── -->
 <div class="slide" id="slide-8">
   <div class="spark-grid"></div>
-  <h1 class="slide-title">Next Steps &amp; <span>Producción</span></h1>
+  <h1 class="slide-title">Completitud — <span>Antes vs Despu&#233;s</span></h1>
+  <p class="slide-subtitle">Impacto de la nueva conciliaci&#243;n en los indicadores de completitud eCommerce CAM</p>
+  <div class="divider"></div>
+
+  <!-- Delta KPIs -->
+  <div class="kpi-row cols-3" style="margin-bottom:14px;">
+    <div class="kpi-card" style="border-color:rgba(0,83,226,.4);background:rgba(0,83,226,.08);">
+      <div class="kpi-label">Pre Sub</div>
+      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
+        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">89.2%</span>
+        <span class="kpi-value" style="color:var(--blue-light);font-size:22px;">90.4%</span>
+      </div>
+      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8593; +1.2 pp</div>
+    </div>
+    <div class="kpi-card" style="border-color:rgba(42,135,3,.4);background:rgba(42,135,3,.08);">
+      <div class="kpi-label">Post Sub</div>
+      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
+        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">90.4%</span>
+        <span class="kpi-value" style="color:var(--green-light);font-size:22px;">91.6%</span>
+      </div>
+      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8593; +1.2 pp</div>
+    </div>
+    <div class="kpi-card" style="border-color:rgba(255,194,32,.4);background:rgba(255,194,32,.06);">
+      <div class="kpi-label">Nill Pick</div>
+      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
+        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">9.3%</span>
+        <span class="kpi-value" style="color:var(--spark);font-size:22px;">8.1%</span>
+      </div>
+      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8595; &#8722;1.2 pp &#10003;</div>
+    </div>
+  </div>
+
+  <!-- Comparaci&#243;n lado a lado -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0;">
+
+    <!-- OLD -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:rgba(234,17,0,.15);border:1px solid rgba(234,17,0,.35);color:var(--red-light);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;border-radius:999px;">&#9675; Antes</span>
+        <span style="font-size:11px;color:var(--text-muted);">Conciliaci&#243;n anterior</span>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;flex:1;display:flex;flex-direction:column;gap:10px;">
+        <img src="Completitud_old.png" alt="Completitud Old" style="width:100%;border-radius:6px;border:1px solid var(--border);object-fit:contain;"/>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Pre Sub</div>
+            <div style="font-size:16px;font-weight:800;color:var(--red-light);">89.2%</div>
+            <div style="font-size:10px;color:var(--text-muted);">3,809,495</div>
+          </div>
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Post Sub</div>
+            <div style="font-size:16px;font-weight:800;color:var(--spark);">90.4%</div>
+            <div style="font-size:10px;color:var(--text-muted);">3,863,512</div>
+          </div>
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Nill Pick</div>
+            <div style="font-size:16px;font-weight:800;color:var(--red-light);">9.3%</div>
+            <div style="font-size:10px;color:var(--text-muted);">396,459</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:rgba(42,135,3,.15);border:1px solid rgba(42,135,3,.35);color:var(--green-light);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;border-radius:999px;">&#10003; Despu&#233;s</span>
+        <span style="font-size:11px;color:var(--text-muted);">Nueva conciliaci&#243;n</span>
+      </div>
+      <div style="background:var(--bg3);border:1px solid rgba(42,135,3,.3);border-radius:10px;padding:10px;flex:1;display:flex;flex-direction:column;gap:10px;">
+        <img src="Completitud_new.png" alt="Completitud New" style="width:100%;border-radius:6px;border:1px solid rgba(42,135,3,.25);object-fit:contain;"/>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(0,83,226,.2);">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Pre Sub</div>
+            <div style="font-size:16px;font-weight:800;color:var(--blue-light);">90.4%</div>
+            <div style="font-size:10px;color:var(--green-light);">3,860,926 &#8593;</div>
+          </div>
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(42,135,3,.2);">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Post Sub</div>
+            <div style="font-size:16px;font-weight:800;color:var(--green-light);">91.6%</div>
+            <div style="font-size:10px;color:var(--green-light);">3,915,658 &#8593;</div>
+          </div>
+          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(255,194,32,.2);">
+            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Nill Pick</div>
+            <div style="font-size:16px;font-weight:800;color:var(--spark);">8.1%</div>
+            <div style="font-size:10px;color:var(--green-light);">344,073 &#8595;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 9 — NEXT STEPS & PRODUCCIÓN ─────────────────── -->
+<div class="slide" id="slide-9">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Next Steps &amp; <span>Producci&#243;n</span></h1>
   <p class="slide-subtitle">Puntos pendientes de alineación — y si estamos OK, corre en productivo</p>
   <div class="divider"></div>
 
