@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conciliación de Pedidos vs Factura POS — Ecommerce CAM</title>
+<style>
+/* ============================================================
+   WALMART DARK MODE — CONCILIACION ECOMMERCE CAM
+   ============================================================ */
+:root {
+  --blue:        #0053e2;
+  --blue-light:  #3378f0;
+  --blue-dim:    #0a1f5e;
+  --spark:       #ffc220;
+  --spark-dim:   #7a5c00;
+  --green:       #2a8703;
+  --green-light: #4caf50;
+  --red:         #ea1100;
+  --red-light:   #f44336;
+  --bg:          #080c14;
+  --bg2:         #0d1321;
+  --bg3:         #111827;
+  --bg4:         #1a2233;
+  --border:      #1e2d47;
+  --border-blue: #1a3a7a;
+  --text-main:   #e8eaf6;
+  --text-dim:    #8892a4;
+  --text-muted:  #5a6478;
+  --card-bg:     #0f1726;
+  --font: 'Segoe UI', -apple-system, Arial, sans-serif;
+  --mono: 'Consolas', 'Courier New', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width:100%; height:100%;
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: var(--font);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── PROGRESS BAR ─────────────────────────────────────────── */
+#progress-bar {
+  position: fixed; top:0; left:0; height:3px;
+  background: linear-gradient(90deg, var(--blue), var(--spark));
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+  z-index: 1000;
+  box-shadow: 0 0 12px rgba(0,83,226,.7);
+}
+
+/* ── SLIDE COUNTER ────────────────────────────────────────── */
+#slide-counter {
+  position: fixed; top:12px; right:24px;
+  font-size:13px; font-weight:600;
+  color: var(--text-dim);
+  letter-spacing:.06em;
+  z-index: 1000;
+}
+
+/* ── WALMART WORDMARK ─────────────────────────────────────── */
+#wm-logo {
+  position: fixed; top:10px; left:20px;
+  z-index: 1000;
+  display: flex; align-items:center; gap:8px;
+  opacity: .7;
+}
+#wm-logo svg { height:22px; }
+#wm-logo span {
+  font-size:14px; font-weight:700;
+  color: var(--spark);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+/* ── SIDE NAV ARROWS ──────────────────────────────────────── */
+.nav-arrow {
+  position: fixed; top:50%; transform:translateY(-50%);
+  width:52px; height:52px;
+  background: rgba(0,83,226,.15);
+  border: 1.5px solid rgba(0,83,226,.4);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:900;
+  transition: background .25s, border-color .25s, transform .25s;
+  backdrop-filter: blur(4px);
+}
+.nav-arrow:hover {
+  background: rgba(0,83,226,.45);
+  border-color: var(--blue);
+  transform: translateY(-50%) scale(1.12);
+}
+.nav-arrow:active { transform: translateY(-50%) scale(.97); }
+#nav-prev { left:14px; }
+#nav-next { right:14px; }
+.nav-arrow svg { width:22px; height:22px; fill:none; stroke:#fff; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ── SLIDES CONTAINER ─────────────────────────────────────── */
+#slides-wrap {
+  width:100vw; height:100vh;
+  position:relative; overflow:hidden;
+}
+
+.slide {
+  position:absolute; top:0; left:0;
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  padding:56px 80px 48px;
+  opacity:0; pointer-events:none;
+  transition: opacity .45s cubic-bezier(.4,0,.2,1);
+}
+.slide.active {
+  opacity:1; pointer-events:all;
+}
+
+/* ── SLIDE 1 — COVER ──────────────────────────────────────── */
+#slide-1 {
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 40%, rgba(0,83,226,.28) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(255,194,32,.10) 0%, transparent 65%),
+    linear-gradient(160deg, #030712 0%, #0a1628 50%, #0d1f4a 100%);
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:56px 120px 48px;
+}
+.s1-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background: rgba(0,83,226,.18);
+  border: 1px solid rgba(0,83,226,.5);
+  border-radius:20px;
+  padding:6px 18px;
+  font-size:13px; font-weight:600;
+  color: var(--blue-light);
+  letter-spacing:.06em;
+  margin-bottom:32px;
+  text-transform:uppercase;
+}
+.s1-badge-dot {
+  width:8px; height:8px; border-radius:50%;
+  background: var(--spark);
+  box-shadow: 0 0 8px var(--spark);
+}
+.s1-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight:800;
+  color:#fff;
+  line-height:1.15;
+  margin-bottom:14px;
+  text-shadow: 0 2px 20px rgba(0,83,226,.4);
+}
+.s1-subtitle {
+  font-size: clamp(17px, 2vw, 24px);
+  font-weight:400;
+  color: rgba(200,215,255,.75);
+  margin-bottom:36px;
+}
+.s1-chips {
+  display:flex; flex-wrap:wrap; gap:10px;
+  justify-content:center;
+  margin-bottom:40px;
+}
+.s1-chip {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius:6px;
+  padding:5px 14px;
+  font-size:13px; color: var(--text-dim);
+}
+.s1-meta {
+  display:flex; gap:24px; justify-content:center; flex-wrap:wrap;
+}
+.s1-meta-item {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+.s1-meta-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
+.s1-meta-value { font-size:14px; color:var(--spark); font-weight:700; }
+
+/* ── SLIDE COMMON HEADER ──────────────────────────────────── */
+.slide-title {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight:800;
+  color:#fff;
+  line-height:1.2;
+  margin-bottom:6px;
+}
+.slide-title span { color: var(--blue-light); }
+.slide-subtitle {
+  font-size: clamp(13px, 1.5vw, 16px);
+  color: var(--text-dim);
+  margin-bottom:20px;
+  font-weight:400;
+}
+.divider {
+  width:100%; height:1px;
+  background: var(--border);
+  margin-bottom:20px;
+}
+
+/* ── KPI CARDS ────────────────────────────────────────────── */
+.kpi-row {
+  display:grid; gap:14px;
+  margin-bottom:16px;
+}
+.kpi-row.cols-4 { grid-template-columns: repeat(4,1fr); }
+.kpi-row.cols-2 { grid-template-columns: repeat(2,1fr); }
+.kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-blue);
+  border-radius:10px;
+  padding:16px 18px;
+  display:flex; flex-direction:column; gap:4px;
+}
+.kpi-card .kpi-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.07em; }
+.kpi-card .kpi-icon { font-size:20px; margin-bottom:4px; }
+.kpi-card .kpi-value { font-size:clamp(18px,2vw,26px); font-weight:800; color: var(--spark); }
+.kpi-card .kpi-sub { font-size:12px; color:var(--text-dim); }
+
+/* ── CALLOUT BOXES ────────────────────────────────────────── */
+.callout-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.callout {
+  border-radius:10px;
+  padding:14px 18px;
+  border-left:4px solid;
+}
+.callout.warn {
+  background: rgba(234,17,0,.08);
+  border-color: var(--red-light);
+}
+.callout.success {
+  background: rgba(42,135,3,.1);
+  border-color: var(--green-light);
+}
+.callout-title { font-size:13px; font-weight:700; margin-bottom:5px; }
+.callout.warn .callout-title { color: var(--red-light); }
+.callout.success .callout-title { color: var(--green-light); }
+.callout p { font-size:12px; color:var(--text-dim); line-height:1.5; }
+
+/* ── INSIGHT BOX ──────────────────────────────────────────── */
+.insight {
+  background: rgba(0,83,226,.1);
+  border: 1px solid rgba(0,83,226,.35);
+  border-left: 4px solid var(--blue);
+  border-radius:10px;
+  padding:12px 18px;
+  font-size:13px;
+  color: rgba(160,195,255,.9);
+  line-height:1.55;
+}
+
+/* ── SLIDE 3 — MATCH DIAGRAM ──────────────────────────────── */
+.match-wrap {
+  display:grid; grid-template-columns:1fr 56px 1fr;
+  gap:0; align-items:stretch;
+  flex:1;
+}
+.match-col {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+.match-col-head {
+  padding:10px 16px;
+  font-size:12px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.07em;
+}
+.match-col-head.janis { background: rgba(0,83,226,.18); color: var(--blue-light); }
+.match-col-head.pos   { background: rgba(42,135,3,.18);  color: var(--green-light); }
+.match-col-meta {
+  padding:6px 16px 8px;
+  font-size:11px; color:var(--text-muted);
+  border-bottom:1px solid var(--border);
+  font-family: var(--mono);
+}
+.match-item {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:7px 16px;
+  border-bottom: 1px solid rgba(30,45,71,.6);
+  font-size:13px;
+}
+.match-item:last-child { border-bottom:none; }
+.match-item .item-name { color:var(--text-dim); }
+.match-item .item-price { color:var(--text-main); font-weight:600; }
+.match-item .item-check { color:var(--green-light); font-weight:700; margin-left:8px; }
+.match-total {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 16px;
+  background: rgba(0,0,0,.3);
+  font-weight:700;
+  font-size:14px;
+}
+.match-center {
+  display:flex; align-items:center; justify-content:center;
+}
+.match-badge {
+  background: var(--green);
+  color:#fff;
+  font-size:12px; font-weight:800;
+  padding:8px 12px;
+  border-radius:8px;
+  text-align:center;
+  writing-mode:horizontal-tb;
+  white-space:nowrap;
+  transform:none;
+  display:flex; flex-direction:column; gap:2px;
+  box-shadow: 0 0 18px rgba(42,135,3,.5);
+}
+
+/* ── FLOW DIAGRAM ─────────────────────────────────────────── */
+.flow-row {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:18px;
+}
+.flow-box {
+  flex:1;
+  background: var(--card-bg);
+  border:1px solid var(--border-blue);
+  border-radius:10px;
+  padding:14px 16px;
+  text-align:center;
+}
+.flow-box .fb-label { font-size:11px; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.06em; }
+.flow-box .fb-id { font-family:var(--mono); font-size:13px; color:var(--blue-light); font-weight:700; }
+.flow-box .fb-amount { font-size:20px; font-weight:800; color:var(--text-main); }
+.flow-box.debit .fb-amount { color:var(--red-light); }
+.flow-arrow {
+  font-size:20px; color:var(--text-muted);
+  flex-shrink:0; display:flex; align-items:center;
+}
+.flow-arrow svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; }
+
+/* ── SIMILARITY BAR ───────────────────────────────────────── */
+.sim-bar-wrap { margin:8px 0 12px; }
+.sim-bar-track {
+  width:100%; height:8px;
+  background: rgba(255,255,255,.1);
+  border-radius:4px;
+  overflow:hidden;
+}
+.sim-bar-fill {
+  height:100%; border-radius:4px;
+  transition: width .5s;
+}
+.sim-bar-fill.green { background: var(--green-light); box-shadow:0 0 8px rgba(76,175,80,.6); }
+.sim-bar-fill.red   { background: var(--red-light);   box-shadow:0 0 8px rgba(244,67,54,.6); }
+.sim-label { font-size:12px; color:var(--text-dim); margin-top:4px; }
+
+/* ── TABLE ────────────────────────────────────────────────── */
+.data-table {
+  width:100%; border-collapse:collapse;
+  font-size:clamp(11px,1.2vw,13px);
+}
+.data-table thead tr {
+  background: rgba(0,83,226,.18);
+}
+.data-table thead th {
+  padding:9px 12px;
+  text-align:left;
+  font-size:11px;
+  font-weight:700;
+  color: var(--blue-light);
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  border-bottom:1px solid var(--border-blue);
+}
+.data-table tbody tr {
+  border-bottom:1px solid var(--border);
+  transition: background .2s;
+}
+.data-table tbody tr:hover { background: rgba(0,83,226,.07); }
+.data-table tbody td {
+  padding:8px 12px;
+  color: var(--text-dim);
+  vertical-align:middle;
+}
+.data-table tbody td.mono { font-family:var(--mono); color:var(--blue-light); font-size:12px; }
+.data-table tbody td.store { color:var(--text-main); font-weight:600; }
+.data-table tfoot tr {
+  background: rgba(0,83,226,.12);
+  border-top:2px solid var(--blue-dim);
+}
+.data-table tfoot td {
+  padding:9px 12px;
+  font-weight:700;
+  color:var(--spark);
+  font-size:13px;
+}
+.badge-refactura {
+  display:inline-flex; align-items:center; gap:5px;
+  background: rgba(0,83,226,.15);
+  border:1px solid rgba(0,83,226,.4);
+  border-radius:6px;
+  padding:3px 10px;
+  font-size:11px; font-weight:700;
+  color: var(--blue-light);
+  white-space:nowrap;
+}
+.delta-pos { color: var(--green-light); font-weight:700; }
+.delta-neg { color: var(--red-light);   font-weight:700; }
+.pct-pos   { color: var(--green-light); font-size:11px; }
+
+/* ── HORIZONTAL BAR CHART ─────────────────────────────────── */
+.hbar-chart { display:flex; flex-direction:column; gap:14px; flex:1; justify-content:center; }
+.hbar-group { display:flex; flex-direction:column; gap:5px; }
+.hbar-month-label { font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:2px; }
+.hbar-row { display:flex; align-items:center; gap:10px; }
+.hbar-track {
+  flex:1; height:28px;
+  background: rgba(255,255,255,.06);
+  border-radius:6px;
+  overflow:hidden;
+  position:relative;
+}
+.hbar-fill {
+  height:100%; border-radius:6px;
+  display:flex; align-items:center;
+  padding:0 10px;
+  font-size:12px; font-weight:700;
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+  white-space:nowrap;
+  overflow:hidden;
+}
+.hbar-fill.blue { background: var(--blue); color:#fff; }
+.hbar-fill.gray { background: #3a4455; color:#aaa; }
+.hbar-delta {
+  min-width:130px; text-align:right;
+  font-size:12px;
+}
+.hbar-legend {
+  display:flex; gap:24px; justify-content:center;
+  margin-top:10px;
+}
+.legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-dim); }
+.legend-dot { width:14px; height:14px; border-radius:3px; }
+.legend-dot.blue { background:var(--blue); }
+.legend-dot.gray { background:#3a4455; }
+
+/* ── SLIDE 9 — CONCLUSIONS ────────────────────────────────── */
+.concl-list { display:flex; flex-direction:column; gap:10px; flex:1; }
+.concl-item {
+  display:flex; align-items:flex-start; gap:14px;
+  background: var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 18px;
+}
+.concl-icon {
+  width:36px; height:36px; border-radius:8px;
+  background: rgba(0,83,226,.2);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  font-size:18px;
+}
+.concl-text { font-size:clamp(13px,1.4vw,15px); color:var(--text-dim); line-height:1.5; padding-top:6px; }
+.concl-text strong { color:var(--text-main); }
+.insight-lg {
+  background: rgba(0,83,226,.12);
+  border:1px solid rgba(0,83,226,.4);
+  border-left:4px solid var(--blue);
+  border-radius:10px;
+  padding:14px 20px;
+  font-size:clamp(13px,1.4vw,15px);
+  color: rgba(160,200,255,.9);
+  line-height:1.6;
+  margin-top:10px;
+}
+
+/* ── SMALL CASE COLS ──────────────────────────────────────── */
+.two-cases { display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; }
+.case-card {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.case-card.green-border { border-color:rgba(76,175,80,.4); }
+.case-card.red-border   { border-color:rgba(244,67,54,.4); }
+.case-head {
+  font-size:13px; font-weight:700; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.case-head.green { color:var(--green-light); }
+.case-head.red   { color:var(--red-light); }
+.case-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; color:var(--text-dim);
+  padding:3px 0;
+  border-bottom:1px solid rgba(30,45,71,.5);
+}
+.case-item:last-child { border-bottom:none; }
+.case-item .ci-mark { font-size:13px; width:16px; flex-shrink:0; }
+.ci-green { color:var(--green-light); }
+.ci-red   { color:var(--red-light); }
+.case-badge {
+  margin-top:10px;
+  border-radius:7px;
+  padding:7px 12px;
+  font-size:12px; font-weight:700;
+  text-align:center;
+}
+.case-badge.ok  { background:rgba(42,135,3,.15);  border:1px solid rgba(76,175,80,.4); color:var(--green-light); }
+.case-badge.err { background:rgba(234,17,0,.1);   border:1px solid rgba(244,67,54,.4); color:var(--red-light); }
+
+/* ── SLIDE 4 DEVOLUCIÓN CARDS ─────────────────────────────── */
+.dev-cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1; }
+.dev-card {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+.dev-card-head {
+  padding:9px 14px;
+  font-size:12px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.07em;
+}
+.dev-card-head.orig  { background:rgba(0,83,226,.15); color:var(--blue-light); }
+.dev-card-head.nc    { background:rgba(234,17,0,.12);  color:var(--red-light); }
+.dev-item {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:6px 14px;
+  font-size:12px;
+  border-bottom:1px solid rgba(30,45,71,.5);
+}
+.dev-item .di-name { color:var(--text-dim); }
+.dev-item .di-amt  { font-weight:600; }
+.dev-card-head.orig + * .di-amt { color:var(--red-light); }
+.dev-total {
+  display:flex; justify-content:space-between;
+  padding:9px 14px;
+  font-weight:800; font-size:14px;
+  background: rgba(0,0,0,.25);
+  border-top:1px solid var(--border);
+}
+.dev-total.pos { color:var(--red-light); }
+.dev-total.neg { color:var(--spark); }
+.dev-footer {
+  text-align:center; padding:7px;
+  font-size:11px; font-weight:700;
+  color:var(--text-muted);
+  letter-spacing:.05em;
+  border-top:1px solid var(--border);
+}
+
+/* Sparkle grid background effect */
+.spark-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(0,83,226,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,83,226,.04) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+
+/* ── RESPONSIVE ADJUSTMENTS ───────────────────────────────── */
+@media (max-width:1100px) {
+  .slide { padding:44px 52px 40px; }
+  .kpi-row.cols-4 { grid-template-columns: repeat(2,1fr); }
+  .match-wrap { grid-template-columns:1fr 44px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width:11.1%"></div>
+
+<!-- Walmart Logo -->
+<div id="wm-logo">
+  <!-- Walmart Spark SVG (inline) -->
+  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" height="24">
+    <g fill="#ffc220">
+      <rect x="18" y="0" width="4" height="12" rx="2"/>
+      <rect x="18" y="28" width="4" height="12" rx="2"/>
+      <rect x="0" y="18" width="12" height="4" rx="2"/>
+      <rect x="28" y="18" width="12" height="4" rx="2"/>
+      <rect x="4.4" y="4.4" width="12" height="4" rx="2" transform="rotate(45 10.4 6.4)"/>
+      <rect x="23.6" y="31.6" width="12" height="4" rx="2" transform="rotate(45 29.6 33.6)"/>
+      <rect x="31.6" y="4.4" width="4" height="12" rx="2" transform="rotate(45 33.6 10.4)"/>
+      <rect x="4.4" y="23.6" width="4" height="12" rx="2" transform="rotate(45 6.4 29.6)"/>
+    </g>
+  </svg>
+  <span>Walmart</span>
+</div>
+
+<!-- Slide Counter -->
+<div id="slide-counter">1 / 9</div>
+
+<!-- Nav Arrows -->
+<button class="nav-arrow" id="nav-prev" aria-label="Anterior">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+<button class="nav-arrow" id="nav-next" aria-label="Siguiente">
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+</button>
+
+<!-- ============================================================
+     SLIDES
+     ============================================================ -->
+<div id="slides-wrap">
+
+<!-- ── SLIDE 1 — PORTADA ─────────────────────────────────── -->
+<div class="slide active" id="slide-1">
+  <div class="s1-badge">
+    <div class="s1-badge-dot"></div>
+    Ecommerce CAM &nbsp;·&nbsp; BI Analytics
+  </div>
+  <h1 class="s1-title">Conciliación de Pedidos<br>vs Factura POS</h1>
+  <p class="s1-subtitle">Metodología de reconciliación eCommerce CAM</p>
+  <div class="s1-chips">
+    <span class="s1-chip">Fuente: Janis</span>
+    <span class="s1-chip">Referencia: POS/Caja</span>
+    <span class="s1-chip">Match 1:1 por ticket</span>
+    <span class="s1-chip">Detección de devoluciones</span>
+    <span class="s1-chip">Límites en refacturación</span>
+  </div>
+  <div class="s1-meta">
+    <div class="s1-meta-item">
+      <span class="s1-meta-label">Período</span>
+      <span class="s1-meta-value">Abr 2026</span>
+    </div>
+    <div class="s1-meta-item">
+      <span class="s1-meta-label">Región</span>
+      <span class="s1-meta-value">CAM · CR · HN</span>
+    </div>
+    <div class="s1-meta-item">
+      <span class="s1-meta-label">Versión</span>
+      <span class="s1-meta-value">1.0 Ejecutivo</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 2 — ¿QUÉ ES LA CONCILIACIÓN? ────────────────── -->
+<div class="slide" id="slide-2">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Match 1:1 — <span>Pedido vs Factura</span></h1>
+  <p class="slide-subtitle">La caja es la fuente de verdad, no Janis</p>
+  <div class="divider"></div>
+
+  <div class="kpi-row cols-4" style="margin-bottom:14px">
+    <div class="kpi-card">
+      <div class="kpi-label">Match automático</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-sub">Cuando ítems y montos coinciden</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Fuente de verdad</div>
+      <div class="kpi-value" style="color:var(--green-light)">POS</div>
+      <div class="kpi-sub">Caja — base contable final</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Fuente operacional</div>
+      <div class="kpi-value" style="color:var(--blue-light)">Janis</div>
+      <div class="kpi-sub">Intención del pedido · puede diferir</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Brecha típica</div>
+      <div class="kpi-value" style="color:var(--red-light)">Var.</div>
+      <div class="kpi-sub">Sustituciones y faltantes en picking</div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">
+    La conciliación toma el pedido registrado en <strong style="color:var(--blue-light)">Janis</strong> y busca su factura correspondiente emitida por el <strong style="color:var(--green-light)">POS (caja)</strong>. Janis registra la intención — pero no es la fuente final de verdad. La caja registra lo que realmente se facturó.
+  </p>
+
+  <div class="callout-row">
+    <div class="callout warn">
+      <div class="callout-title">&#9888; Janis — Fuente operacional</div>
+      <p>Registra la intención del pedido. Puede diferir del monto final por sustituciones o faltantes en picking.</p>
+    </div>
+    <div class="callout success">
+      <div class="callout-title">&#10003; POS/Caja — Fuente de verdad</div>
+      <p>Lo que realmente se facturó. Base contable y comercial definitiva del proceso.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 3 — DIAGRAMA DEL MATCH ──────────────────────── -->
+<div class="slide" id="slide-3">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Ejemplo real de <span>conciliación exitosa</span></h1>
+  <p class="slide-subtitle">Match 1:1 por UPC, cantidad y monto de ticket</p>
+  <div class="divider"></div>
+
+  <div class="match-wrap" style="flex:1; gap:0; margin-bottom:0">
+    <!-- Janis Col -->
+    <div class="match-col">
+      <div class="match-col-head janis">&#128203; Pedido Janis</div>
+      <div class="match-col-meta">
+        #EC-8821 &nbsp;|&nbsp; Tienda La Lima &nbsp;|&nbsp; 19 Abr 10:34 &nbsp;|&nbsp; Delivery
+      </div>
+      <div class="match-item"><span class="item-name">Leche Dos Pinos 1L x2</span><span><span class="item-price">&#8353;2,180</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Arroz Tío Pelón 1kg x3</span><span><span class="item-price">&#8353;3,450</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Aceite Clover 750ml x1</span><span><span class="item-price">&#8353;2,890</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Papel Higiénico Scott x1</span><span><span class="item-price">&#8353;4,250</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Jabón Palmolive 3pk x2</span><span><span class="item-price">&#8353;3,100</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-total"><span style="color:var(--text-dim);font-size:12px">TOTAL PEDIDO</span><span style="color:var(--spark)">&#8353;15,870</span></div>
+    </div>
+
+    <!-- Center Badge -->
+    <div class="match-center">
+      <div class="match-badge">
+        <span style="font-size:20px">&#10003;</span>
+        <span style="font-size:11px">100%</span>
+        <span style="font-size:10px;opacity:.8">MATCH</span>
+      </div>
+    </div>
+
+    <!-- POS Col -->
+    <div class="match-col">
+      <div class="match-col-head pos">&#127973; Factura POS</div>
+      <div class="match-col-meta">
+        #T-0042-198821 &nbsp;|&nbsp; POS La Lima &nbsp;|&nbsp; 19 Abr 11:02 &nbsp;|&nbsp; &#10003; Facturado
+      </div>
+      <div class="match-item"><span class="item-name">Leche Dos Pinos 1L x2</span><span><span class="item-price">&#8353;2,180</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Arroz Tío Pelón 1kg x3</span><span><span class="item-price">&#8353;3,450</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Aceite Clover 750ml x1</span><span><span class="item-price">&#8353;2,890</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Papel Higiénico Scott x1</span><span><span class="item-price">&#8353;4,250</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-item"><span class="item-name">Jabón Palmolive 3pk x2</span><span><span class="item-price">&#8353;3,100</span><span class="item-check"> &#10003;</span></span></div>
+      <div class="match-total"><span style="color:var(--text-dim);font-size:12px">TOTAL FACTURADO</span><span style="color:var(--green-light)">&#8353;15,870</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 4 — DEVOLUCIÓN TOTAL ────────────────────────── -->
+<div class="slide" id="slide-4">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Detección de <span>Devolución Total</span></h1>
+  <p class="slide-subtitle">Mismos ítems, mismos montos — venta neta = &#8353;0</p>
+  <div class="divider"></div>
+
+  <!-- Flow -->
+  <div class="flow-row" style="margin-bottom:12px">
+    <div class="flow-box">
+      <div class="fb-label">Pedido Janis</div>
+      <div class="fb-id">#EC-8821</div>
+      <div class="fb-amount">&#8353;15,870</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+    </div>
+    <div class="flow-box">
+      <div class="fb-label">Factura POS</div>
+      <div class="fb-id">Match &#10003;</div>
+      <div class="fb-amount">&#8353;15,870</div>
+    </div>
+    <div class="flow-arrow">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+    </div>
+    <div class="flow-box debit">
+      <div class="fb-label">Devolución TOTAL</div>
+      <div class="fb-id" style="color:var(--red-light)">NC #NC-00821</div>
+      <div class="fb-amount">−&#8353;15,870</div>
+    </div>
+  </div>
+
+  <!-- Two cards -->
+  <div class="dev-cards" style="margin-bottom:12px">
+    <div class="dev-card">
+      <div class="dev-card-head orig">Factura original</div>
+      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--red-light)">&#8353;2,180</span></div>
+      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--red-light)">&#8353;3,450</span></div>
+      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--red-light)">&#8353;2,890</span></div>
+      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--red-light)">&#8353;4,250</span></div>
+      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--red-light)">&#8353;3,100</span></div>
+      <div class="dev-total pos"><span>TOTAL</span><span>&#8353;15,870</span></div>
+    </div>
+    <div class="dev-card">
+      <div class="dev-card-head nc">Nota de crédito — #NC-00821</div>
+      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--spark)">−&#8353;2,180</span></div>
+      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--spark)">−&#8353;3,450</span></div>
+      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--spark)">−&#8353;2,890</span></div>
+      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--spark)">−&#8353;4,250</span></div>
+      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--spark)">−&#8353;3,100</span></div>
+      <div class="dev-total neg"><span>TOTAL NC</span><span>−&#8353;15,870</span></div>
+      <div class="dev-footer">Venta neta = &#8353;0 — Anulación total</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    Sin este vínculo, la factura de &#8353;15,870 aparecería como venta válida cuando el neto real es &#8353;0. El proceso identifica este escenario comparando UPCs y cantidades entre la factura original y la nota de crédito emitida.
+  </div>
+</div>
+
+<!-- ── SLIDE 5 — REFACTURACIÓN ────────────────────────────── -->
+<div class="slide" id="slide-5">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">&#191;Qué pasa con una <span>Refacturación?</span></h1>
+  <p class="slide-subtitle">La variación de ítems determina si se puede conciliar</p>
+  <div class="divider"></div>
+
+  <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">
+    Una refacturación ocurre cuando el ticket original es anulado y se genera uno nuevo. La clave está en la <strong style="color:var(--text-main)">similitud de ítems</strong>.
+  </p>
+
+  <div class="two-cases">
+    <!-- CASO A -->
+    <div class="case-card green-border">
+      <div class="case-head green">
+        <span style="background:rgba(42,135,3,.2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px">A</span>
+        Variación pequeña — &#10003; Conciliable
+      </div>
+      <div class="sim-bar-wrap">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:11px;color:var(--text-muted)">Similitud de ítems</span>
+          <span style="font-size:13px;font-weight:700;color:var(--green-light)">83%</span>
+        </div>
+        <div class="sim-bar-track"><div class="sim-bar-fill green" style="width:83%"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">Pedido Janis</div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Leche Dos Pinos 1L</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Arroz Tío Pelón 1kg</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Aceite Clover 750ml</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Papel Scott x1</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Jabón Palmolive 3pk</span></div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">Refactura POS</div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Leche Dos Pinos 1L</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Arroz Tío Pelón 1kg</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Aceite Clover 750ml</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Papel Scott x1</span></div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Jabón Palmolive 3pk</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--blue-light)">+</span><span style="color:var(--blue-light)">Atún Sardimar</span></div>
+        </div>
+      </div>
+      <div class="case-badge ok">&#10003; Match encontrado — 5 de 6 ítems coinciden</div>
+    </div>
+
+    <!-- CASO B -->
+    <div class="case-card red-border">
+      <div class="case-head red">
+        <span style="background:rgba(234,17,0,.15);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px">B</span>
+        Variación grande — &#10007; No conciliable
+      </div>
+      <div class="sim-bar-wrap">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:11px;color:var(--text-muted)">Similitud de ítems</span>
+          <span style="font-size:13px;font-weight:700;color:var(--red-light)">20%</span>
+        </div>
+        <div class="sim-bar-track"><div class="sim-bar-fill red" style="width:20%"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">Pedido Janis</div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Leche Dos Pinos 1L</span></div>
+          <div class="case-item"><span class="ci-mark ci-red">&#10007;</span><span>Arroz Tío Pelón</span></div>
+          <div class="case-item"><span class="ci-mark ci-red">&#10007;</span><span>Aceite Clover</span></div>
+          <div class="case-item"><span class="ci-mark ci-red">&#10007;</span><span>Papel Scott</span></div>
+          <div class="case-item"><span class="ci-mark ci-red">&#10007;</span><span>Jabón Palmolive</span></div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">Refactura POS</div>
+          <div class="case-item"><span class="ci-mark ci-green">&#10003;</span><span>Leche Dos Pinos 1L</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--text-muted)">—</span><span style="color:var(--text-muted)">Pollo fresco 1kg</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--text-muted)">—</span><span style="color:var(--text-muted)">Queso Turrialba</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--text-muted)">—</span><span style="color:var(--text-muted)">Yogur Naturt x4</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--text-muted)">—</span><span style="color:var(--text-muted)">Galletas Festival</span></div>
+          <div class="case-item"><span class="ci-mark" style="color:var(--text-muted)">—</span><span style="color:var(--text-muted)">+ 3 más distintos</span></div>
+        </div>
+      </div>
+      <div class="case-badge err">&#10007; Sin match — variación demasiado alta</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 6 — TABLA PEDIDOS REFACTURACIÓN ─────────────── -->
+<!-- ── SLIDE 6 — PEDIDOS + RESULTADOS (MERGED) ────────────── -->
+<div class="slide" id="slide-6">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Pedidos con Refacturación &amp; <span>Resultados vs Freeze</span></h1>
+  <p class="slide-subtitle">5 pedidos identificados · La Lima (4449) y Escazú (4032) · Feb–Abr 2026</p>
+  <div class="divider"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0;">
+
+    <!-- LEFT: tabla pedidos compacta -->
+    <div style="display:flex;flex-direction:column;gap:10px;min-height:0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:2px;">Pedidos evaluados · Refactura encontrada</div>
+      <div style="overflow:auto;flex:1;">
+        <table class="data-table" style="font-size:12px;">
+          <thead>
+            <tr>
+              <th>ID Pedido</th>
+              <th>Tienda</th>
+              <th>Fecha</th>
+              <th>Ítems</th>
+              <th>Dif.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono" style="font-size:11px;">4449-2205007</td>
+              <td class="store">La Lima</td>
+              <td style="font-size:11px;">2026-03-27</td>
+              <td style="text-align:center;">43</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);font-weight:700">0</span></td>
+            </tr>
+            <tr>
+              <td class="mono" style="font-size:11px;">4449-2204012</td>
+              <td class="store">La Lima</td>
+              <td style="font-size:11px;">2026-03-27</td>
+              <td style="text-align:center;">24</td>
+              <td style="text-align:center;"><span style="color:var(--spark);font-weight:700">3</span></td>
+            </tr>
+            <tr>
+              <td class="mono" style="font-size:11px;">4449-2208578</td>
+              <td class="store">La Lima</td>
+              <td style="font-size:11px;">2026-03-29</td>
+              <td style="text-align:center;">49</td>
+              <td style="text-align:center;"><span style="color:var(--red-light);font-weight:700">27</span></td>
+            </tr>
+            <tr>
+              <td class="mono" style="font-size:11px;">4032-2208027</td>
+              <td class="store">Escazú</td>
+              <td style="font-size:11px;">2026-03-29</td>
+              <td style="text-align:center;">35</td>
+              <td style="text-align:center;"><span style="color:var(--spark);font-weight:700">3</span></td>
+            </tr>
+            <tr>
+              <td class="mono" style="font-size:11px;">4032-2204745</td>
+              <td class="store">Escazú</td>
+              <td style="font-size:11px;">2026-03-27</td>
+              <td style="text-align:center;">43</td>
+              <td style="text-align:center;"><span style="color:var(--green-light);font-weight:700">0</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:8px;">Ecomm CR · Conciliado por herramienta analítica</p>
+    </div>
+
+    <!-- RIGHT: KPIs + tabla freeze -->
+    <div style="display:flex;flex-direction:column;gap:10px;min-height:0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:2px;">Nuevo vs Freeze · Feb–Abr 2026</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="kpi-card" style="padding:10px 12px;">
+          <div class="kpi-label" style="font-size:10px;">Total Nuevo</div>
+          <div class="kpi-value" style="font-size:16px;">31,795,915</div>
+          <div class="kpi-sub" style="font-size:10px;">Auto + Herramienta</div>
+        </div>
+        <div class="kpi-card" style="padding:10px 12px;">
+          <div class="kpi-label" style="font-size:10px;">Total Freeze</div>
+          <div class="kpi-value" style="font-size:16px;color:var(--text-dim);">31,316,130</div>
+          <div class="kpi-sub" style="font-size:10px;">Referencia oficial</div>
+        </div>
+        <div class="kpi-card" style="padding:10px 12px;border-color:rgba(42,135,3,.4);background:rgba(42,135,3,.08);">
+          <div class="kpi-label" style="font-size:10px;">Delta Total</div>
+          <div class="kpi-value" style="font-size:16px;color:var(--green-light);">+479,785</div>
+          <div class="kpi-sub" style="font-size:10px;">Ventas adicionales capturadas</div>
+        </div>
+        <div class="kpi-card" style="padding:10px 12px;border-color:rgba(42,135,3,.4);background:rgba(42,135,3,.08);">
+          <div class="kpi-label" style="font-size:10px;">Var. Promedio</div>
+          <div class="kpi-value" style="font-size:16px;color:var(--green-light);">+1.53%</div>
+          <div class="kpi-sub" style="font-size:10px;">Consistente 3 meses</div>
+        </div>
+      </div>
+      <div style="overflow:auto;flex:1;">
+        <table class="data-table" style="font-size:12px;">
+          <thead>
+            <tr><th>Mes</th><th>Total Nuevo</th><th>Freeze</th><th>Delta</th><th>Var %</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700;color:var(--text-main);">Feb 2026</td>
+              <td style="font-family:var(--mono);">10,370,806</td>
+              <td style="font-family:var(--mono);color:var(--text-dim);">10,202,614</td>
+              <td class="delta-pos">+168,192</td>
+              <td class="pct-pos">+1.65%</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;color:var(--text-main);">Mar 2026</td>
+              <td style="font-family:var(--mono);">13,203,358</td>
+              <td style="font-family:var(--mono);color:var(--text-dim);">12,965,761</td>
+              <td class="delta-pos">+237,597</td>
+              <td class="pct-pos">+1.83%</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700;color:var(--text-main);">Abr 2026</td>
+              <td style="font-family:var(--mono);">8,221,751</td>
+              <td style="font-family:var(--mono);color:var(--text-dim);">8,147,755</td>
+              <td class="delta-pos">+73,996</td>
+              <td class="pct-pos">+0.91%</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td>TOTAL</td><td>31,795,915</td><td>31,316,130</td><td>+479,785</td><td>+1.53%</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 7 — CHART ────────────────────────────────────── -->
+<div class="slide" id="slide-7">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Comparativo visual <span>por mes</span></h1>
+  <p class="slide-subtitle">Conciliación nueva (azul) vs Freeze (gris) — escala proporcional a 13,203,358</p>
+  <div class="divider"></div>
+
+  <div class="hbar-chart" style="padding:0 20px">
+    <!-- FEB 2026 -->
+    <div class="hbar-group">
+      <div class="hbar-month-label">Febrero 2026</div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Nuevo</div>
+        <div class="hbar-track">
+          <div class="hbar-fill blue" style="width:78.5%">&#8353;10,370,806</div>
+        </div>
+        <div class="hbar-delta delta-pos">+&#8353;168,192 &nbsp;<span style="font-size:11px;color:var(--green-light)">+1.65%</span></div>
+      </div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Freeze</div>
+        <div class="hbar-track">
+          <div class="hbar-fill gray" style="width:77.3%">&#8353;10,202,614</div>
+        </div>
+        <div class="hbar-delta" style="color:var(--text-muted);font-size:12px">referencia</div>
+      </div>
+    </div>
+
+    <!-- MAR 2026 -->
+    <div class="hbar-group">
+      <div class="hbar-month-label">Marzo 2026</div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Nuevo</div>
+        <div class="hbar-track">
+          <div class="hbar-fill blue" style="width:100%">&#8353;13,203,358</div>
+        </div>
+        <div class="hbar-delta delta-pos">+&#8353;237,597 &nbsp;<span style="font-size:11px;color:var(--green-light)">+1.83%</span></div>
+      </div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Freeze</div>
+        <div class="hbar-track">
+          <div class="hbar-fill gray" style="width:98.2%">&#8353;12,965,761</div>
+        </div>
+        <div class="hbar-delta" style="color:var(--text-muted);font-size:12px">referencia</div>
+      </div>
+    </div>
+
+    <!-- ABR 2026 -->
+    <div class="hbar-group">
+      <div class="hbar-month-label">Abril 2026</div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Nuevo</div>
+        <div class="hbar-track">
+          <div class="hbar-fill blue" style="width:62.3%">&#8353;8,221,751</div>
+        </div>
+        <div class="hbar-delta delta-pos">+&#8353;73,996 &nbsp;<span style="font-size:11px;color:var(--green-light)">+0.91%</span></div>
+      </div>
+      <div class="hbar-row">
+        <div style="width:100px;font-size:11px;color:var(--text-muted);text-align:right;padding-right:10px;line-height:1.3">Freeze</div>
+        <div class="hbar-track">
+          <div class="hbar-fill gray" style="width:61.7%">&#8353;8,147,755</div>
+        </div>
+        <div class="hbar-delta" style="color:var(--text-muted);font-size:12px">referencia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="hbar-legend">
+    <div class="legend-item"><div class="legend-dot blue"></div>Conciliación nueva (Auto + Herramienta)</div>
+    <div class="legend-item"><div class="legend-dot gray"></div>Tabla Freeze</div>
+    <div class="legend-item" style="margin-left:16px">
+      <span style="color:var(--green-light);font-weight:700;font-size:14px">+&#8353;479,785</span>
+      <span style="color:var(--text-muted);font-size:13px">delta total acumulado</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 8 — NEXT STEPS ───────────────────────────────── -->
+<div class="slide" id="slide-8">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Next Steps — <span>Puntos a definir</span></h1>
+  <p class="slide-subtitle">Acciones pendientes de alineación antes de proceder con la conciliación oficial</p>
+  <div class="divider"></div>
+
+  <div class="concl-list">
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(255,194,32,.15)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <p class="concl-text"><strong>¿En qué mes se refleja la venta recuperada?</strong> Se deben definir los criterios contables: ¿la diferencia de <span style="color:var(--green-light);font-weight:700">+&#8353;479,785</span> se reconoce en el mes de <strong>mayo 2026</strong>, o se aplica como ajuste retroactivo a los meses originales (Feb–Abr)?</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(0,83,226,.2)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      </div>
+      <p class="concl-text"><strong>Ítems adicionales deben incluirse dentro del pedido original.</strong> Cualquier producto o cantidad que el picker agregue o sustituya <strong>debe registrarse como parte del pedido en Janis</strong> — no como una transacción separada. Esto mejora directamente las coincidencias y facilita el proceso de conciliación automática.</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(234,17,0,.15)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <p class="concl-text"><strong>¿Cómo se manejan los pedidos no conciliables?</strong> Los pedidos con variación superior al umbral (Caso B — similitud &lt;80%) deben tener un flujo de revisión manual definido: ¿quién los revisa, en qué plazo, y qué registro genera?</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <p class="concl-text"><strong>Alineación con los equipos de finanzas y operaciones.</strong> Confirmar con Finance y Ops que la metodología de match (Janis → POS → NC) es aceptada como fuente oficial para el reporte de ventas eCommerce CAM antes de correr los procesos definitivos.</p>
+    </div>
+
+  </div>
+
+  <div class="insight-lg" style="background:rgba(255,194,32,.07);border-color:rgba(255,194,32,.25);color:var(--spark);">
+    <strong style="color:var(--spark);">Punto clave:</strong> Agregar los ítems adicionales <em>dentro del pedido</em> es la palanca más importante para mejorar la tasa de conciliación automática y reducir la revisión manual.
+  </div>
+</div>
+
+<!-- ── SLIDE 9 — RECOMENDACIONES ──────────────────────────── -->
+<div class="slide" id="slide-9">
+  <div class="spark-grid"></div>
+  <h1 class="slide-title">Recomendaciones — <span>¿Estamos alineados?</span></h1>
+  <p class="slide-subtitle">Si hay acuerdo en los puntos anteriores, se procede a correr los procesos oficiales de conciliación</p>
+  <div class="divider"></div>
+
+  <div class="concl-list">
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(0,83,226,.2)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </div>
+      <p class="concl-text"><strong>Correr el proceso de Pre-Sustitución (Pre-Sub).</strong> Una vez confirmada la metodología, ejecutar el cálculo de Pre-Sub que establece el estado del pedido <em>antes</em> de que el picker realice sustituciones — línea base de la conciliación.</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </div>
+      <p class="concl-text"><strong>Correr el proceso de Post-Sustitución (Post-Sub).</strong> Ejecutar el cálculo Post-Sub que refleja el estado final del pedido <em>después</em> de sustituciones y ajustes del picker — captura la realidad operativa del despacho.</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(255,194,32,.12)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <p class="concl-text"><strong>Correr el proceso de Nill Pick.</strong> Generar el cálculo de Nill Pick para identificar los ítems comprometidos en el pedido que <em>no fueron entregados</em> ni sustituidos — métrica crítica para medir la promesa de surtido al cliente.</p>
+    </div>
+
+    <div class="concl-item">
+      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <p class="concl-text"><strong>Publicar los resultados integrados.</strong> Con Pre-Sub, Post-Sub y Nill Pick calculados bajo la nueva conciliación, los reportes de eCommerce CAM tendrán trazabilidad completa y consistencia entre la plataforma operacional (Janis), la facturación (POS) y los KPIs de calidad de surtido.</p>
+    </div>
+
+  </div>
+
+  <div class="insight-lg">
+    <strong>¿Están de acuerdo?</strong> &nbsp;Con la alineación confirmada, se procede a ejecutar los tres procesos — <strong>Pre-Sub · Post-Sub · Nill Pick</strong> — bajo la metodología de conciliación validada en esta sesión.
+  </div>
+</div>
+
+</div><!-- /slides-wrap -->
+
+<!-- ============================================================
+     JAVASCRIPT — NAVIGATION
+     ============================================================ -->
+<script>
+(function() {
+  var slides   = document.querySelectorAll('.slide');
+  var total    = slides.length;
+  var current  = 0;
+  var animating = false;
+
+  var counter  = document.getElementById('slide-counter');
+  var progress = document.getElementById('progress-bar');
+  var btnPrev  = document.getElementById('nav-prev');
+  var btnNext  = document.getElementById('nav-next');
+
+  function goTo(n, dir) {
+    if (animating) return;
+    if (n < 0 || n >= total) return;
+
+    animating = true;
+    var from = current;
+    current  = n;
+
+    /* fade out old, fade in new */
+    slides[from].style.transition = 'opacity .4s ease';
+    slides[from].style.opacity    = '0';
+
+    setTimeout(function() {
+      slides[from].classList.remove('active');
+      slides[from].style.opacity    = '';
+      slides[from].style.transition = '';
+
+      slides[current].classList.add('active');
+      slides[current].style.opacity    = '0';
+      slides[current].style.transition = 'opacity .4s ease';
+
+      /* Force reflow */
+      void slides[current].offsetHeight;
+      slides[current].style.opacity = '1';
+
+      setTimeout(function() {
+        slides[current].style.opacity    = '';
+        slides[current].style.transition = '';
+        animating = false;
+      }, 420);
+    }, 420);
+
+    /* Counter */
+    counter.textContent = (current + 1) + ' / ' + total;
+
+    /* Progress bar */
+    var pct = ((current + 1) / total * 100).toFixed(1);
+    progress.style.width = pct + '%';
+
+    /* Arrow visibility */
+    btnPrev.style.opacity = current === 0        ? '0.3' : '1';
+    btnNext.style.opacity = current === total - 1 ? '0.3' : '1';
+    btnPrev.style.pointerEvents = current === 0        ? 'none' : 'all';
+    btnNext.style.pointerEvents = current === total - 1 ? 'none' : 'all';
+  }
+
+  /* Init */
+  counter.textContent = '1 / ' + total;
+  btnPrev.style.opacity = '0.3';
+  btnPrev.style.pointerEvents = 'none';
+
+  /* Button clicks */
+  btnPrev.addEventListener('click', function() { goTo(current - 1, -1); });
+  btnNext.addEventListener('click', function() { goTo(current + 1,  1); });
+
+  /* Keyboard */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1,  1); }
+    if (e.key === 'ArrowLeft')                    { e.preventDefault(); goTo(current - 1, -1); }
+    if (e.key === 'Home')                          { e.preventDefault(); goTo(0, -1); }
+    if (e.key === 'End')                           { e.preventDefault(); goTo(total - 1, 1); }
+  });
+
+  /* Touch swipe */
+  var touchX = null;
+  document.addEventListener('touchstart', function(e) { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 60) { goTo(dx < 0 ? current + 1 : current - 1, dx < 0 ? 1 : -1); }
+    touchX = null;
+  });
+})();
+</script>
+
+</body>
+</html>
