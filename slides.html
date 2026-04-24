@@ -589,7 +589,7 @@ html, body {
 </div>
 
 <!-- Slide Counter -->
-<div id="slide-counter">1 / 9</div>
+<div id="slide-counter">1 / 8</div>
 
 <!-- Nav Arrows -->
 <button class="nav-arrow" id="nav-prev" aria-label="Anterior">
@@ -646,7 +646,7 @@ html, body {
     <div class="kpi-card">
       <div class="kpi-label">Match automático</div>
       <div class="kpi-value">100%</div>
-      <div class="kpi-sub">Cuando ítems y montos coinciden</div>
+      <div class="kpi-sub">Cuando el código provee la trazabilidad</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Fuente de verdad</div>
@@ -656,7 +656,7 @@ html, body {
     <div class="kpi-card">
       <div class="kpi-label">Fuente operacional</div>
       <div class="kpi-value" style="color:var(--blue-light)">Janis</div>
-      <div class="kpi-sub">Intención del pedido · puede diferir</div>
+      <div class="kpi-sub">Registra el pedido · fuente operacional</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Brecha típica</div>
@@ -666,13 +666,13 @@ html, body {
   </div>
 
   <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">
-    La conciliación toma el pedido registrado en <strong style="color:var(--blue-light)">Janis</strong> y busca su factura correspondiente emitida por el <strong style="color:var(--green-light)">POS (caja)</strong>. Janis registra la intención — pero no es la fuente final de verdad. La caja registra lo que realmente se facturó.
+    La conciliación toma el pedido registrado en <strong style="color:var(--blue-light)">Janis</strong> y busca su factura correspondiente emitida por el <strong style="color:var(--green-light)">POS (caja)</strong>. Janis registra el pedido como tal — es una fuente operacional válida, pero no es la fuente contable final de verdad. La caja registra lo que realmente se facturó.
   </p>
 
   <div class="callout-row">
     <div class="callout warn">
       <div class="callout-title">&#9888; Janis — Fuente operacional</div>
-      <p>Registra la intención del pedido. Puede diferir del monto final por sustituciones o faltantes en picking.</p>
+      <p>Registra el pedido como tal. Es una fuente operacional — puede diferir del ticket final por sustituciones o faltantes en picking.</p>
     </div>
     <div class="callout success">
       <div class="callout-title">&#10003; POS/Caja — Fuente de verdad</div>
@@ -685,7 +685,7 @@ html, body {
 <div class="slide" id="slide-3">
   <div class="spark-grid"></div>
   <h1 class="slide-title">Ejemplo real de <span>conciliación exitosa</span></h1>
-  <p class="slide-subtitle">Match 1:1 por UPC, cantidad y monto de ticket</p>
+  <p class="slide-subtitle">El código identifica la trazabilidad entre el pedido operacional y la factura de caja</p>
   <div class="divider"></div>
 
   <div class="match-wrap" style="flex:1; gap:0; margin-bottom:0">
@@ -796,7 +796,7 @@ html, body {
   <div class="divider"></div>
 
   <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px">
-    Una refacturación ocurre cuando el ticket original es anulado y se genera uno nuevo. La clave está en la <strong style="color:var(--text-main)">similitud de ítems</strong>.
+    Una refacturación ocurre cuando el ticket original es anulado y se genera uno nuevo. El proceso busca el <strong style="color:var(--text-main)">mejor aproximado</strong>: cuando hay diferencia de <strong style="color:var(--spark)">−3 a +3 ítems</strong> entre el pedido y la refactura se puede conciliar con confianza. Si ese rango se abre, aparecen falsos positivos. <strong style="color:var(--text-main)">No existe un límite de monto de venta</strong> — restringirlo dejaría por fuera tickets con agregados de alto valor.
   </p>
 
   <div class="two-cases">
@@ -893,7 +893,6 @@ html, body {
               <th>Tienda</th>
               <th>Fecha</th>
               <th>Ítems</th>
-              <th>Dif.</th>
             </tr>
           </thead>
           <tbody>
@@ -902,40 +901,47 @@ html, body {
               <td class="store">La Lima</td>
               <td style="font-size:11px;">2026-03-27</td>
               <td style="text-align:center;">43</td>
-              <td style="text-align:center;"><span style="color:var(--green-light);font-weight:700">0</span></td>
             </tr>
             <tr>
               <td class="mono" style="font-size:11px;">4449-2204012</td>
               <td class="store">La Lima</td>
               <td style="font-size:11px;">2026-03-27</td>
               <td style="text-align:center;">24</td>
-              <td style="text-align:center;"><span style="color:var(--spark);font-weight:700">3</span></td>
             </tr>
             <tr>
               <td class="mono" style="font-size:11px;">4449-2208578</td>
               <td class="store">La Lima</td>
               <td style="font-size:11px;">2026-03-29</td>
               <td style="text-align:center;">49</td>
-              <td style="text-align:center;"><span style="color:var(--red-light);font-weight:700">27</span></td>
             </tr>
             <tr>
               <td class="mono" style="font-size:11px;">4032-2208027</td>
               <td class="store">Escazú</td>
               <td style="font-size:11px;">2026-03-29</td>
               <td style="text-align:center;">35</td>
-              <td style="text-align:center;"><span style="color:var(--spark);font-weight:700">3</span></td>
             </tr>
             <tr>
               <td class="mono" style="font-size:11px;">4032-2204745</td>
               <td class="store">Escazú</td>
               <td style="font-size:11px;">2026-03-27</td>
               <td style="text-align:center;">43</td>
-              <td style="text-align:center;"><span style="color:var(--green-light);font-weight:700">0</span></td>
             </tr>
           </tbody>
         </table>
       </div>
       <p style="font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:8px;">Ecomm CR · Conciliado por herramienta analítica</p>
+
+      <!-- Pedidos especiales -->
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+        <div style="background:rgba(0,83,226,.08);border:1px solid rgba(0,83,226,.25);border-radius:8px;padding:7px 10px;">
+          <div style="font-size:10px;font-weight:700;color:#3d7fff;margin-bottom:3px;">&#10003; 947-670335 — Refactura compartida = Factura original OMS</div>
+          <div style="font-size:10px;color:var(--text-dim);line-height:1.5;">La refacturación identificada corresponde a la factura original que hizo match con OMS. La transacción está bien clasificada — el proceso detectó una cancelación relacionada.</div>
+        </div>
+        <div style="background:rgba(42,135,3,.07);border:1px solid rgba(42,135,3,.25);border-radius:8px;padding:7px 10px;">
+          <div style="font-size:10px;font-weight:700;color:var(--green-light);margin-bottom:3px;">&#10003; 4032-2207254 — Bien clasificada en conciliación</div>
+          <div style="font-size:10px;color:var(--text-dim);line-height:1.5;">Durante el proceso de conciliación se encuentra correctamente clasificada. No requiere ajuste adicional.</div>
+        </div>
+      </div>
     </div>
 
     <!-- RIGHT: KPIs + tabla freeze -->
@@ -995,6 +1001,31 @@ html, body {
             <tr><td>TOTAL</td><td>31,795,915</td><td>31,316,130</td><td>+479,785</td><td>+1.53%</td></tr>
           </tfoot>
         </table>
+      </div>
+
+      <!-- Transacciones identificadas -->
+      <div style="margin-top:8px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:6px;">Transacciones identificadas</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 9px;">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:2px;">Feb 2026</div>
+            <div style="font-size:11px;color:var(--text-dim);">Antes: <span style="font-family:var(--mono);">98,952</span></div>
+            <div style="font-size:11px;color:var(--green-light);font-weight:700;">Ahora: <span style="font-family:var(--mono);">100,913</span></div>
+            <div style="font-size:10px;color:var(--green-light);">+1,961 txns</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 9px;">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:2px;">Mar 2026</div>
+            <div style="font-size:11px;color:var(--text-dim);">Antes: <span style="font-family:var(--mono);">124,863</span></div>
+            <div style="font-size:11px;color:var(--green-light);font-weight:700;">Ahora: <span style="font-family:var(--mono);">126,729</span></div>
+            <div style="font-size:10px;color:var(--green-light);">+1,866 txns</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 9px;">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:2px;">Abr 2026</div>
+            <div style="font-size:11px;color:var(--text-dim);">Antes: <span style="font-family:var(--mono);">83,023</span></div>
+            <div style="font-size:11px;color:var(--spark);font-weight:700;">Ahora: <span style="font-family:var(--mono);">80,281</span></div>
+            <div style="font-size:10px;color:var(--spark);">-2,742 txns</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1080,88 +1111,49 @@ html, body {
 <!-- ── SLIDE 8 — NEXT STEPS ───────────────────────────────── -->
 <div class="slide" id="slide-8">
   <div class="spark-grid"></div>
-  <h1 class="slide-title">Next Steps — <span>Puntos a definir</span></h1>
-  <p class="slide-subtitle">Acciones pendientes de alineación antes de proceder con la conciliación oficial</p>
+  <h1 class="slide-title">Next Steps &amp; <span>Producción</span></h1>
+  <p class="slide-subtitle">Puntos pendientes de alineación — y si estamos OK, corre en productivo</p>
   <div class="divider"></div>
 
-  <div class="concl-list">
+  <div class="concl-list" style="margin-bottom:14px;">
 
     <div class="concl-item">
       <div class="concl-icon" style="background:rgba(255,194,32,.15)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
-      <p class="concl-text"><strong>¿En qué mes se refleja la venta recuperada?</strong> Se deben definir los criterios contables: ¿la diferencia de <span style="color:var(--green-light);font-weight:700">+&#8353;479,785</span> se reconoce en el mes de <strong>mayo 2026</strong>, o se aplica como ajuste retroactivo a los meses originales (Feb–Abr)?</p>
+      <p class="concl-text"><strong>¿En qué mes se refleja la venta recuperada?</strong> Definir los criterios contables: ¿la diferencia de <span style="color:var(--green-light);font-weight:700">+&#8353;479,785</span> se reconoce en <strong>mayo 2026</strong>, o se aplica como ajuste retroactivo a los meses originales (Feb–Abr)?</p>
     </div>
 
     <div class="concl-item">
       <div class="concl-icon" style="background:rgba(0,83,226,.2)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
       </div>
-      <p class="concl-text"><strong>Ítems adicionales deben incluirse dentro del pedido original.</strong> Cualquier producto o cantidad que el picker agregue o sustituya <strong>debe registrarse como parte del pedido en Janis</strong> — no como una transacción separada. Esto mejora directamente las coincidencias y facilita el proceso de conciliación automática.</p>
-    </div>
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(234,17,0,.15)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </div>
-      <p class="concl-text"><strong>¿Cómo se manejan los pedidos no conciliables?</strong> Los pedidos con variación superior al umbral (Caso B — similitud &lt;80%) deben tener un flujo de revisión manual definido: ¿quién los revisa, en qué plazo, y qué registro genera?</p>
-    </div>
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      </div>
-      <p class="concl-text"><strong>Alineación con los equipos de finanzas y operaciones.</strong> Confirmar con Finance y Ops que la metodología de match (Janis → POS → NC) es aceptada como fuente oficial para el reporte de ventas eCommerce CAM antes de correr los procesos definitivos.</p>
+      <p class="concl-text"><strong>Ítems adicionales deben incluirse dentro del pedido original.</strong> Cualquier producto o cantidad que el picker agregue o sustituya <strong>debe registrarse en Janis como parte del pedido</strong> — no como transacción separada. Esto mejora directamente el rate de conciliación automática.</p>
     </div>
 
   </div>
 
-  <div class="insight-lg" style="background:rgba(255,194,32,.07);border-color:rgba(255,194,32,.25);color:var(--spark);">
-    <strong style="color:var(--spark);">Punto clave:</strong> Agregar los ítems adicionales <em>dentro del pedido</em> es la palanca más importante para mejorar la tasa de conciliación automática y reducir la revisión manual.
-  </div>
-</div>
-
-<!-- ── SLIDE 9 — RECOMENDACIONES ──────────────────────────── -->
-<div class="slide" id="slide-9">
-  <div class="spark-grid"></div>
-  <h1 class="slide-title">Recomendaciones — <span>¿Estamos alineados?</span></h1>
-  <p class="slide-subtitle">Si hay acuerdo en los puntos anteriores, se procede a correr los procesos oficiales de conciliación</p>
-  <div class="divider"></div>
-
-  <div class="concl-list">
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(0,83,226,.2)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+  <!-- Sección: si estamos alineados -->
+  <div style="border:1px solid rgba(42,135,3,.3);border-radius:12px;background:rgba(42,135,3,.06);padding:14px 16px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--green-light);margin-bottom:10px;">&#10003; Si estamos de acuerdo — Correr en productivo</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div style="background:rgba(0,83,226,.1);border:1px solid rgba(0,83,226,.25);border-radius:8px;padding:10px 12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--blue-light);margin-bottom:4px;">&#128260; Pre-Sub</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.5;">Estado del pedido <em>antes</em> de sustituciones. Línea base de la conciliación.</div>
       </div>
-      <p class="concl-text"><strong>Correr el proceso de Pre-Sustitución (Pre-Sub).</strong> Una vez confirmada la metodología, ejecutar el cálculo de Pre-Sub que establece el estado del pedido <em>antes</em> de que el picker realice sustituciones — línea base de la conciliación.</p>
-    </div>
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      <div style="background:rgba(42,135,3,.1);border:1px solid rgba(42,135,3,.25);border-radius:8px;padding:10px 12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--green-light);margin-bottom:4px;">&#10003; Post-Sub</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.5;">Estado final <em>después</em> de sustituciones y ajustes. Realidad operativa del despacho.</div>
       </div>
-      <p class="concl-text"><strong>Correr el proceso de Post-Sustitución (Post-Sub).</strong> Ejecutar el cálculo Post-Sub que refleja el estado final del pedido <em>después</em> de sustituciones y ajustes del picker — captura la realidad operativa del despacho.</p>
-    </div>
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(255,194,32,.12)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <div style="background:rgba(255,194,32,.1);border:1px solid rgba(255,194,32,.25);border-radius:8px;padding:10px 12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--spark);margin-bottom:4px;">&#11088; Nill Pick</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.5;">Ítems comprometidos no entregados ni sustituidos. Métrica crítica de promesa al cliente.</div>
       </div>
-      <p class="concl-text"><strong>Correr el proceso de Nill Pick.</strong> Generar el cálculo de Nill Pick para identificar los ítems comprometidos en el pedido que <em>no fueron entregados</em> ni sustituidos — métrica crítica para medir la promesa de surtido al cliente.</p>
     </div>
-
-    <div class="concl-item">
-      <div class="concl-icon" style="background:rgba(42,135,3,.15)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <p class="concl-text"><strong>Publicar los resultados integrados.</strong> Con Pre-Sub, Post-Sub y Nill Pick calculados bajo la nueva conciliación, los reportes de eCommerce CAM tendrán trazabilidad completa y consistencia entre la plataforma operacional (Janis), la facturación (POS) y los KPIs de calidad de surtido.</p>
-    </div>
-
   </div>
 
-  <div class="insight-lg">
-    <strong>¿Están de acuerdo?</strong> &nbsp;Con la alineación confirmada, se procede a ejecutar los tres procesos — <strong>Pre-Sub · Post-Sub · Nill Pick</strong> — bajo la metodología de conciliación validada en esta sesión.
+  <div class="insight-lg" style="margin-top:12px;">
+    <strong>¿Están de acuerdo?</strong> &nbsp;Con la alineación confirmada se ejecutan los tres procesos — <strong>Pre-Sub · Post-Sub · Nill Pick</strong> — ya en productivo bajo la metodología validada.
   </div>
 </div>
 
