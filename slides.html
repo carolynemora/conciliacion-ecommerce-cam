@@ -619,20 +619,7 @@ html, body {
     <span class="s1-chip">Detección de devoluciones</span>
     <span class="s1-chip">Límites en refacturación</span>
   </div>
-  <div class="s1-meta">
-    <div class="s1-meta-item">
-      <span class="s1-meta-label">Período</span>
-      <span class="s1-meta-value">Abr 2026</span>
-    </div>
-    <div class="s1-meta-item">
-      <span class="s1-meta-label">Región</span>
-      <span class="s1-meta-value">CAM · CR · HN</span>
-    </div>
-    <div class="s1-meta-item">
-      <span class="s1-meta-label">Versión</span>
-      <span class="s1-meta-value">1.0 Ejecutivo</span>
-    </div>
-  </div>
+
 </div>
 
 <!-- ── SLIDE 2 — ¿QUÉ ES LA CONCILIACIÓN? ────────────────── -->
@@ -732,7 +719,7 @@ html, body {
 <div class="slide" id="slide-4">
   <div class="spark-grid"></div>
   <h1 class="slide-title">Detección de <span>Devolución Total</span></h1>
-  <p class="slide-subtitle">Mismos ítems, mismos montos — venta neta = $0</p>
+  <p class="slide-subtitle">Mismos ítems, mismos montos — venta neta = &#8353;0</p>
   <div class="divider"></div>
 
   <!-- Flow -->
@@ -740,7 +727,7 @@ html, body {
     <div class="flow-box">
       <div class="fb-label">Pedido Janis</div>
       <div class="fb-id">#EC-8821</div>
-      <div class="fb-amount">$15,870</div>
+      <div class="fb-amount">&#8353;15,870</div>
     </div>
     <div class="flow-arrow">
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
@@ -748,7 +735,7 @@ html, body {
     <div class="flow-box">
       <div class="fb-label">Factura POS</div>
       <div class="fb-id">Match &#10003;</div>
-      <div class="fb-amount">$15,870</div>
+      <div class="fb-amount">&#8353;15,870</div>
     </div>
     <div class="flow-arrow">
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
@@ -756,7 +743,7 @@ html, body {
     <div class="flow-box debit">
       <div class="fb-label">Devolución TOTAL</div>
       <div class="fb-id" style="color:var(--red-light)">NC #NC-00821</div>
-      <div class="fb-amount">−$15,870</div>
+      <div class="fb-amount">−&#8353;15,870</div>
     </div>
   </div>
 
@@ -764,27 +751,27 @@ html, body {
   <div class="dev-cards" style="margin-bottom:12px">
     <div class="dev-card">
       <div class="dev-card-head orig">Factura original</div>
-      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--red-light)">$2,180</span></div>
-      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--red-light)">$3,450</span></div>
-      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--red-light)">$2,890</span></div>
-      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--red-light)">$4,250</span></div>
-      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--red-light)">$3,100</span></div>
-      <div class="dev-total pos"><span>TOTAL</span><span>$15,870</span></div>
+      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--red-light)">&#8353;2,180</span></div>
+      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--red-light)">&#8353;3,450</span></div>
+      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--red-light)">&#8353;2,890</span></div>
+      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--red-light)">&#8353;4,250</span></div>
+      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--red-light)">&#8353;3,100</span></div>
+      <div class="dev-total pos"><span>TOTAL</span><span>&#8353;15,870</span></div>
     </div>
     <div class="dev-card">
       <div class="dev-card-head nc">Nota de crédito — #NC-00821</div>
-      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--spark)">−$2,180</span></div>
-      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--spark)">−$3,450</span></div>
-      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--spark)">−$2,890</span></div>
-      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--spark)">−$4,250</span></div>
-      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--spark)">−$3,100</span></div>
-      <div class="dev-total neg"><span>TOTAL NC</span><span>−$15,870</span></div>
-      <div class="dev-footer">Venta neta = $0 — Anulación total</div>
+      <div class="dev-item"><span class="di-name">Leche Dos Pinos 1L x2</span><span class="di-amt" style="color:var(--spark)">−&#8353;2,180</span></div>
+      <div class="dev-item"><span class="di-name">Arroz Tío Pelón 1kg x3</span><span class="di-amt" style="color:var(--spark)">−&#8353;3,450</span></div>
+      <div class="dev-item"><span class="di-name">Aceite Clover 750ml x1</span><span class="di-amt" style="color:var(--spark)">−&#8353;2,890</span></div>
+      <div class="dev-item"><span class="di-name">Papel Higiénico Scott x1</span><span class="di-amt" style="color:var(--spark)">−&#8353;4,250</span></div>
+      <div class="dev-item"><span class="di-name">Jabón Palmolive 3pk x2</span><span class="di-amt" style="color:var(--spark)">−&#8353;3,100</span></div>
+      <div class="dev-total neg"><span>TOTAL NC</span><span>−&#8353;15,870</span></div>
+      <div class="dev-footer">Venta neta = &#8353;0 — Anulación total</div>
     </div>
   </div>
 
   <div class="insight">
-    Sin este vínculo, la factura de $15,870 aparecería como venta válida cuando el neto real es $0. El proceso identifica este escenario comparando UPCs y cantidades entre la factura original y la nota de crédito emitida.
+    Sin este vínculo, la factura de &#8353;15,870 aparecería como venta válida cuando el neto real es &#8353;0. El proceso identifica este escenario comparando UPCs y cantidades entre la factura original y la nota de crédito emitida.
   </div>
 </div>
 
