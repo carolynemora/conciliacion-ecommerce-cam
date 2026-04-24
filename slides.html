@@ -1095,100 +1095,115 @@ html, body {
   </div>
 </div>
 
-<!-- ── SLIDE 8 — NEXT STEPS ───────────────────────────────── -->
-<!-- ── SLIDE 8 — COMPLETITUD OLD vs NEW ─────────────────── -->
+<!-- ── SLIDE 8 — COMPLETITUD: ESTIMACIÓN DE MEJORA ──────── -->
 <div class="slide" id="slide-8">
   <div class="spark-grid"></div>
-  <h1 class="slide-title">Completitud — <span>Antes vs Despu&#233;s</span></h1>
-  <p class="slide-subtitle">Impacto de la nueva conciliaci&#243;n en los indicadores de completitud eCommerce CAM</p>
+  <h1 class="slide-title">Completitud — <span>Impacto Estimado</span></h1>
+  <p class="slide-subtitle">Mejora en indicadores con la nueva metodología de conciliación &nbsp;&#183;&nbsp; <em style="color:var(--spark);font-style:normal;">* Estimación</em></p>
   <div class="divider"></div>
 
-  <!-- Delta KPIs -->
-  <div class="kpi-row cols-3" style="margin-bottom:14px;">
-    <div class="kpi-card" style="border-color:rgba(0,83,226,.4);background:rgba(0,83,226,.08);">
-      <div class="kpi-label">Pre Sub</div>
-      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
-        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">89.2%</span>
-        <span class="kpi-value" style="color:var(--blue-light);font-size:22px;">90.4%</span>
+  <!-- 3 indicadores con barras de comparacion -->
+  <div style="display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center;">
+
+    <!-- PRE SUB -->
+    <div style="background:var(--bg3);border:1px solid rgba(0,83,226,.3);border-radius:12px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--blue-light);">Pre Sub</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#205;tems completados antes de sustituciones</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:11px;color:var(--text-muted);text-decoration:line-through;">89.2%</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#8594;</span>
+          <span style="font-size:20px;font-weight:900;color:var(--blue-light);">90.4%</span>
+          <span style="background:rgba(42,135,3,.2);border:1px solid rgba(42,135,3,.4);color:var(--green-light);font-size:11px;font-weight:700;padding:.2rem .6rem;border-radius:999px;">&#8593; +1.2 pp</span>
+        </div>
       </div>
-      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8593; +1.2 pp</div>
-    </div>
-    <div class="kpi-card" style="border-color:rgba(42,135,3,.4);background:rgba(42,135,3,.08);">
-      <div class="kpi-label">Post Sub</div>
-      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
-        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">90.4%</span>
-        <span class="kpi-value" style="color:var(--green-light);font-size:22px;">91.6%</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Antes &nbsp;<span style="font-family:var(--mono);color:var(--text-dim);">3,809,495 items</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:89.2%;height:100%;background:linear-gradient(90deg,#5a6478,#8892a4);border-radius:4px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--green-light);margin-bottom:4px;">Ahora &nbsp;<span style="font-family:var(--mono);color:var(--green-light);">3,860,926 items &nbsp;(+51,431 &#8593;)</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:90.4%;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-light));border-radius:4px;"></div>
+          </div>
+        </div>
       </div>
-      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8593; +1.2 pp</div>
     </div>
-    <div class="kpi-card" style="border-color:rgba(255,194,32,.4);background:rgba(255,194,32,.06);">
-      <div class="kpi-label">Nill Pick</div>
-      <div style="display:flex;align-items:baseline;gap:8px;justify-content:center;">
-        <span style="font-size:13px;color:var(--text-muted);text-decoration:line-through;">9.3%</span>
-        <span class="kpi-value" style="color:var(--spark);font-size:22px;">8.1%</span>
+
+    <!-- POST SUB -->
+    <div style="background:var(--bg3);border:1px solid rgba(42,135,3,.3);border-radius:12px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--green-light);">Post Sub</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#205;tems completados después de sustituciones</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:11px;color:var(--text-muted);text-decoration:line-through;">90.4%</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#8594;</span>
+          <span style="font-size:20px;font-weight:900;color:var(--green-light);">91.6%</span>
+          <span style="background:rgba(42,135,3,.2);border:1px solid rgba(42,135,3,.4);color:var(--green-light);font-size:11px;font-weight:700;padding:.2rem .6rem;border-radius:999px;">&#8593; +1.2 pp</span>
+        </div>
       </div>
-      <div class="kpi-sub" style="color:var(--green-light);font-weight:700;">&#8595; &#8722;1.2 pp &#10003;</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Antes &nbsp;<span style="font-family:var(--mono);color:var(--text-dim);">3,863,512 items</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:90.4%;height:100%;background:linear-gradient(90deg,#5a6478,#8892a4);border-radius:4px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--green-light);margin-bottom:4px;">Ahora &nbsp;<span style="font-family:var(--mono);color:var(--green-light);">3,915,658 items &nbsp;(+52,146 &#8593;)</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:91.6%;height:100%;background:linear-gradient(90deg,var(--green),var(--green-light));border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- NILL PICK -->
+    <div style="background:var(--bg3);border:1px solid rgba(255,194,32,.3);border-radius:12px;padding:14px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--spark);">Nill Pick</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#205;tems comprometidos no entregados &nbsp;—&nbsp; <strong style="color:var(--green-light);">menor es mejor</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:11px;color:var(--text-muted);text-decoration:line-through;">9.3%</span>
+          <span style="font-size:11px;color:var(--text-muted);">&#8594;</span>
+          <span style="font-size:20px;font-weight:900;color:var(--spark);">8.1%</span>
+          <span style="background:rgba(42,135,3,.2);border:1px solid rgba(42,135,3,.4);color:var(--green-light);font-size:11px;font-weight:700;padding:.2rem .6rem;border-radius:999px;">&#8595; &#8722;1.2 pp &#10003;</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center;">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Antes &nbsp;<span style="font-family:var(--mono);color:var(--text-dim);">396,459 items sin pickear</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:93%;height:100%;background:linear-gradient(90deg,#7a3a00,#995213);border-radius:4px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--green-light);margin-bottom:4px;">Ahora &nbsp;<span style="font-family:var(--mono);color:var(--green-light);">344,073 items sin pickear &nbsp;(&#8722;52,386 &#8595;)</span></div>
+          <div style="background:var(--bg2);border-radius:4px;height:10px;overflow:hidden;">
+            <div style="width:81%;height:100%;background:linear-gradient(90deg,var(--spark-dim),var(--spark));border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Comparaci&#243;n lado a lado -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0;">
-
-    <!-- OLD -->
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="background:rgba(234,17,0,.15);border:1px solid rgba(234,17,0,.35);color:var(--red-light);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;border-radius:999px;">&#9675; Antes</span>
-        <span style="font-size:11px;color:var(--text-muted);">Conciliaci&#243;n anterior</span>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;flex:1;display:flex;flex-direction:column;gap:10px;">
-        <img src="Completitud_old.png" alt="Completitud Old" style="width:100%;border-radius:6px;border:1px solid var(--border);object-fit:contain;"/>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Pre Sub</div>
-            <div style="font-size:16px;font-weight:800;color:var(--red-light);">89.2%</div>
-            <div style="font-size:10px;color:var(--text-muted);">3,809,495</div>
-          </div>
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Post Sub</div>
-            <div style="font-size:16px;font-weight:800;color:var(--spark);">90.4%</div>
-            <div style="font-size:10px;color:var(--text-muted);">3,863,512</div>
-          </div>
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Nill Pick</div>
-            <div style="font-size:16px;font-weight:800;color:var(--red-light);">9.3%</div>
-            <div style="font-size:10px;color:var(--text-muted);">396,459</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- NEW -->
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="background:rgba(42,135,3,.15);border:1px solid rgba(42,135,3,.35);color:var(--green-light);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;border-radius:999px;">&#10003; Despu&#233;s</span>
-        <span style="font-size:11px;color:var(--text-muted);">Nueva conciliaci&#243;n</span>
-      </div>
-      <div style="background:var(--bg3);border:1px solid rgba(42,135,3,.3);border-radius:10px;padding:10px;flex:1;display:flex;flex-direction:column;gap:10px;">
-        <img src="Completitud_new.png" alt="Completitud New" style="width:100%;border-radius:6px;border:1px solid rgba(42,135,3,.25);object-fit:contain;"/>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(0,83,226,.2);">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Pre Sub</div>
-            <div style="font-size:16px;font-weight:800;color:var(--blue-light);">90.4%</div>
-            <div style="font-size:10px;color:var(--green-light);">3,860,926 &#8593;</div>
-          </div>
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(42,135,3,.2);">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Post Sub</div>
-            <div style="font-size:16px;font-weight:800;color:var(--green-light);">91.6%</div>
-            <div style="font-size:10px;color:var(--green-light);">3,915,658 &#8593;</div>
-          </div>
-          <div style="text-align:center;background:var(--bg2);border-radius:6px;padding:6px 4px;border:1px solid rgba(255,194,32,.2);">
-            <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Nill Pick</div>
-            <div style="font-size:16px;font-weight:800;color:var(--spark);">8.1%</div>
-            <div style="font-size:10px;color:var(--green-light);">344,073 &#8595;</div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Insight + nota estimacion -->
+  <div style="margin-top:12px;background:rgba(42,135,3,.07);border:1px solid rgba(42,135,3,.25);border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <p style="font-size:12px;color:var(--text-dim);line-height:1.5;margin:0;">
+      <strong style="color:var(--green-light);">+52,146 ítems adicionales completados</strong> en Post Sub y
+      <strong style="color:var(--green-light);">52,386 ítems menos sin pickear</strong> — la nueva conciliación captura transacciones que antes no se vinculaban, mejorando todos los indicadores de forma consistente.
+    </p>
+    <span style="white-space:nowrap;font-size:10px;color:var(--spark);border:1px solid rgba(255,194,32,.3);border-radius:6px;padding:.3rem .7rem;background:rgba(255,194,32,.06);">* Estimación</span>
   </div>
 </div>
 
